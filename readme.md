@@ -2,6 +2,10 @@
 
 A minimalist one-minute timer for focused tasks.
 
+## Project Description
+
+Do Something For A Minute is a simple and elegant one-minute timer to help you focus on a single task. Perfect for quick exercises, meditation, or any brief activity that needs timing.
+
 ## Features
 
 - One-minute countdown timer
@@ -12,15 +16,16 @@ A minimalist one-minute timer for focused tasks.
 
 ## Tech Stack
 
-- Next.js 13+ (App Router)
+- Next.js 13+
 - TypeScript
 - Tailwind CSS
 - Framer Motion
 
 ## Updates
 
-v1.0.0 - Initial release with core timer functionality and responsive design
-v1.0.1 - Added analytics and SEO optimizations
+v0.0.1 - Initial release with core timer functionality and responsive design
+v0.0.2 - Added analytics and SEO optimizations
+v0.0.3 - Minor bug fixes and performance improvements
 
 ## Usage
 
