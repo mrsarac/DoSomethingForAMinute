@@ -1,4 +1,3 @@
-import { ModeToggle } from "./ModeToggle";
 import { ArrowLeft, ChevronDown } from "lucide-react";
 import { useState } from "react";
 
@@ -76,7 +75,7 @@ const Header = () => {
               <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm transition-transform" />
             </button>
           </div>
-          <ModeToggle />
+          {/* Mode toggle removed */}
         </div>
       </div>
     </header>

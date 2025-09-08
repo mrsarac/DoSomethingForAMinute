@@ -5,5 +5,5 @@ export const TIMER_CONFIG = {
   MAX_SPEED_MULTIPLIER: 3, // Maximum speed multiplier for the timer
   ACCELERATION_INTERVAL: 1000, // Interval for increasing the acceleration factor
   ACCELERATION_MULTIPLIER: 2, // Multiplier for the acceleration factor
-  EXTEND_SECONDS: 60
+  
 } as const;

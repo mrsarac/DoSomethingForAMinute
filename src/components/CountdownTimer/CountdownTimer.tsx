@@ -21,7 +21,7 @@ export const CountdownTimer: React.FC<TimerProps & { onTimerUpdate?: (seconds: n
   const [isSpacePressed, setIsSpacePressed] = useState(false);
   const [showSpeedMessage, setShowSpeedMessage] = useState(false);
   const [accelerationFactor, setAccelerationFactor] = useState(1);
-  const [hasExtended, setHasExtended] = useState(false);
+  
 
   useEffect(() => {
     setIsClient(true);
@@ -89,16 +89,6 @@ export const CountdownTimer: React.FC<TimerProps & { onTimerUpdate?: (seconds: n
   }, [isSpacePressed]);
 
   const timerDisplay = formatTime(seconds);
-  const canExtend = seconds > 0 && !hasExtended;
-
-  const handleExtend = () => {
-    setSeconds(prev => {
-      const next = prev + TIMER_CONFIG.EXTEND_SECONDS;
-      onTimerUpdate?.(next);
-      return next;
-    });
-    setHasExtended(true);
-  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -123,18 +113,7 @@ export const CountdownTimer: React.FC<TimerProps & { onTimerUpdate?: (seconds: n
       )}
       </div>
 
-      {canExtend && (
-        <div className="mt-3">
-          <button
-            type="button"
-            onClick={handleExtend}
-            aria-label="1 dakika uzat"
-            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm sm:text-base"
-          >
-            1 dk uzat
-          </button>
-        </div>
-      )}
+      
     </div>
   );
 };
