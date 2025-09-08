@@ -21,6 +21,15 @@ export const metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico', type: 'image/x-icon' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
     title: 'Do Something For A Minute - One Minute Timer',
     description: 'A simple and elegant one-minute timer to help you focus on a single task. Perfect for quick exercises, meditation, or any brief activity that needs timing.',
