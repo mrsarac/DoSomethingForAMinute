@@ -21,7 +21,6 @@ A minimalist one-minute timer for focused tasks.
 
 v1.0.0 - Initial release with core timer functionality and responsive design
 v1.0.1 - Added analytics and SEO optimizations
-v1.1.0 - Removed manual theme toggle and "extend 1 minute" button, added Netlify config (plugin + Node 20), moved viewport to dedicated export for Next 15, minor cleanup
 
 ## Usage
 
