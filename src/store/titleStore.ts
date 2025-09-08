@@ -15,6 +15,8 @@ export const useTitleStore = create<TitleState>()(
     }),
     {
       name: 'title-storage',
+      // Defer applying persisted state until client, to avoid SSR mismatches
+      skipHydration: true,
     }
   )
 );

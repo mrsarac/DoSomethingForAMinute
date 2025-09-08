@@ -14,15 +14,24 @@ export default function Home() {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const { title, setTitle } = useTitleStore();
-    const [storeLoaded, setStoreLoaded] = useState(false);
+  const [storeLoaded, setStoreLoaded] = useState(false);
+  const [storeHydrated, setStoreHydrated] = useState(false);
 
-    useEffect(() => {
-        setMounted(true);
-        // Simulate store loading
-        setTimeout(() => {
-            setStoreLoaded(true);
-        }, 100);
-    }, []);
+  useEffect(() => {
+    setMounted(true);
+    // Ensure persisted Zustand state is applied on client
+    const unsub = useTitleStore.persist.onFinishHydration(() => {
+      setStoreHydrated(true);
+    });
+    useTitleStore.persist.rehydrate();
+
+    // Simulate small fade-in after store load
+    const t = setTimeout(() => setStoreLoaded(true), 100);
+    return () => {
+      unsub();
+      clearTimeout(t);
+    };
+  }, []);
 
 
   const handleReset = () => {
@@ -55,7 +64,7 @@ export default function Home() {
         }
     };
 
-  if (!mounted) {
+  if (!mounted || !storeHydrated) {
     return (
       <main className="min-h-screen grid place-items-center text-black px-4">
         <div className="grid gap-6 sm:gap-8">
@@ -76,6 +85,7 @@ export default function Home() {
               <h1
                 onClick={handleTitleClick}
                 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif cursor-pointer"
+                suppressHydrationWarning
               >
                 {title} for a minute
               </h1>
@@ -112,6 +122,7 @@ export default function Home() {
             <h1
               onClick={handleTitleClick}
               className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif cursor-pointer"
+              suppressHydrationWarning
             >
               {title} for a minute
             </h1>

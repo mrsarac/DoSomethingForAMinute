@@ -4,6 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { TimerProps } from '@/types/timer';
 import { formatTime } from '@/utils/timeFormatter';
 import { TIMER_CONFIG } from '@/constants/timer';
+import { Source_Serif_4 } from 'next/font/google';
+
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const CountdownTimer: React.FC<TimerProps & { onTimerUpdate?: (seconds: number) => void }> = ({
   initialSeconds = TIMER_CONFIG.DEFAULT_SECONDS,
@@ -92,8 +98,8 @@ export const CountdownTimer: React.FC<TimerProps & { onTimerUpdate?: (seconds: n
       <div className="min-w-[80px] sm:min-w-[100px] text-center inline-block text-7xl sm:text-8xl md:text-9xl lg:text-[14rem] leading-none tracking-wider font-serif">
         
         
-        <div className="tabular-nums tracking-wider font-serif"
-        style={{fontVariantNumeric: 'tabular-nums', letterSpacing: '0.1em', textSizeAdjust: '100%'}}
+        <div className={`${sourceSerif.className} tabular-nums lining-nums tracking-wider`}
+        style={{fontVariantNumeric: 'tabular-nums lining-nums', letterSpacing: '0.1em', textSizeAdjust: '100%'}}
         >
           {timerDisplay}
         </div>
