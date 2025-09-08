@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CountdownTimer } from "src/components/CountdownTimer";
 import { TIMER_CONFIG } from "src/constants/timer";
 import { useTitleStore } from "src/store/titleStore";
@@ -34,14 +34,14 @@ export default function Home() {
   }, []);
 
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     setResetKey((prev) => prev + 1);
     setCurrentSeconds(TIMER_CONFIG.DEFAULT_SECONDS);
-  };
+  }, []);
 
-  const handleTimerUpdate = (seconds: number) => {
+  const handleTimerUpdate = useCallback((seconds: number) => {
     setCurrentSeconds(seconds);
-  };
+  }, []);
 
   const handleTitleClick = () => {
     setIsEditing(true);
@@ -65,38 +65,26 @@ export default function Home() {
     };
 
   if (!mounted || !storeHydrated) {
+    // Render a loading state or a consistent structure on the server and initial client render.
     return (
-      <main className="min-h-screen grid place-items-center text-black px-4">
+      <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text">
         <div className="grid gap-6 sm:gap-8">
-          <header className={`text-center ${storeLoaded ? 'opacity-100 transition-opacity duration-200' : 'opacity-0'}`}>
-            {isEditing ? (
-              <input
-                ref={inputRef}
-                type="text"
-                value={title}
-                onChange={handleTitleChange}
-                onBlur={handleTitleBlur}
-                onKeyDown={handleKeyDown}
-                maxLength={100}
-                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif text-center bg-transparent border-0 focus:outline-none"
-                autoFocus
-              />
-            ) : (
-              <h1
-                onClick={handleTitleClick}
-                className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif cursor-pointer"
-                suppressHydrationWarning
-              >
-                {title} for a minute
-              </h1>
-            )}
-            <p className="mt-2 text-sm sm:text-base text-gray-600">
+          <header className={`flex flex-col gap-2 text-center opacity-0`}>
+            <h1
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-serif cursor-pointer"
+              suppressHydrationWarning
+            >
+              {title} for a minute
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600">
               A simple timer to help you focus for one minute
             </p>
           </header>
-          <section className="-mt-8 sm:-mt-12" aria-label="Timer Section">
+          <section className="-mt-4 md:-mt-8" aria-label="Timer Section">
             <CountdownTimer key={resetKey} onTimerUpdate={handleTimerUpdate} />
           </section>
+          <footer className="text-center text-xs sm:text-sm text-gray-500">
+          </footer>
         </div>
       </main>
     );
