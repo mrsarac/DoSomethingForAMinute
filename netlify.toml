@@ -1,0 +1,12 @@
+## Netlify configuration for Next.js
+[build]
+  command = "npm run build"
+  # Let the Next.js runtime manage the publish dir; leaving unset is fine.
+
+## Ensure Next.js runtime is applied
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"
+

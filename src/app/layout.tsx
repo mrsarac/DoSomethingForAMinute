@@ -21,12 +21,6 @@ export const metadata = {
     address: false,
     telephone: false,
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: 'no',
-  },
   openGraph: {
     title: 'Do Something For A Minute - One Minute Timer',
     description: 'A simple and elegant one-minute timer to help you focus on a single task. Perfect for quick exercises, meditation, or any brief activity that needs timing.',
@@ -55,6 +49,13 @@ export const metadata = {
   verification: {
     google: 'G-LJGS4DQHHJ',
   },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: 'no',
 };
 
 export default function RootLayout({
