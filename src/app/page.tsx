@@ -67,7 +67,7 @@ export default function Home() {
   if (!mounted || !storeHydrated) {
     // Render a loading state or a consistent structure on the server and initial client render.
     return (
-      <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text">
+      <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100">
         <div className="grid gap-6 sm:gap-8">
           <header className={`flex flex-col gap-2 text-center opacity-0`}>
             <h1
@@ -91,7 +91,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text">
+    <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100">
       <div className="grid gap-6 sm:gap-8">
         <header className={`flex flex-col gap-2 text-center ${storeLoaded ? 'opacity-100 transition-opacity duration-200' : 'opacity-0'}`}>
           {isEditing ? (
@@ -126,7 +126,7 @@ export default function Home() {
           {currentSeconds === 0 ? (
             <button
               onClick={handleReset}
-              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors text-sm sm:text-base"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100 rounded-lg transition-colors text-sm sm:text-base"
             >
               {title} for a minute
             </button>

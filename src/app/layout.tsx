@@ -1,6 +1,8 @@
 import './globals.css';
 import { Cormorant } from 'next/font/google';
 import Script from 'next/script';
+import ThemeProvider from '@/components/ThemeProvider';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const cormorant = Cormorant({
   subsets: ['latin'],
@@ -86,9 +88,22 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
+              function gtag(){dataLayer.push(arguments);} 
               gtag('js', new Date());
               gtag('config', 'G-LJGS4DQHHJ');
+            `,
+          }}
+        />
+        {/* Prevent theme flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const stored = localStorage.getItem('theme');
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const wantDark = stored ? stored === 'dark' : systemDark;
+                if (wantDark) document.documentElement.classList.add('dark');
+              } catch (e) {}
             `,
           }}
         />
@@ -119,8 +134,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-custom-bg text-custom-text antialiased">
-        {children}
+      <body className="bg-custom-bg text-custom-text antialiased dark:bg-gray-900 dark:text-gray-100">
+        <ThemeProvider>
+          {/* Floating theme toggle button */}
+          <div className="fixed top-4 right-4 z-50">
+            <ThemeToggle />
+          </div>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
