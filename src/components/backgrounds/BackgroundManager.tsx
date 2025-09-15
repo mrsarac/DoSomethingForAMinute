@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useBackgroundStore } from "@/store/backgroundStore";
 import AnimatedBlobs from "./AnimatedBlobs";
+import PixelFlicker from "./PixelFlicker";
 
 const registry = {
   animatedBlobs: AnimatedBlobs,
@@ -11,12 +12,17 @@ const registry = {
 export default function BackgroundManager() {
   const enabled = useBackgroundStore((s) => s.enabled);
   const type = useBackgroundStore((s) => s.type);
+  const pixelFlickerEnabled = useBackgroundStore((s) => s.pixelFlickerEnabled);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
-  if (!mounted || !enabled) return null;
+  if (!mounted) return null;
 
   const Comp = registry[type] ?? AnimatedBlobs;
-  return <Comp />;
+  return (
+    <>
+      {enabled && <Comp />}
+      {pixelFlickerEnabled && <PixelFlicker />}
+    </>
+  );
 }
-

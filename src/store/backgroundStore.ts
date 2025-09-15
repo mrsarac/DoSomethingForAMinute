@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-export type BackgroundType = "animatedBlobs" | "none"; // extendable (e.g., "particles", "canvasNoise")
+export type BackgroundType = "animatedBlobs" | "pixelFlicker" | "none"; // extendable (e.g., "particles", "canvasNoise")
 
 interface BackgroundState {
   enabled: boolean;
@@ -11,6 +11,10 @@ interface BackgroundState {
   toggleEnabled: () => void;
   setEnabled: (value: boolean) => void;
   setType: (type: BackgroundType) => void;
+  // Independent Pixel Flicker overlay control
+  pixelFlickerEnabled: boolean;
+  togglePixelFlicker: () => void;
+  setPixelFlickerEnabled: (value: boolean) => void;
 }
 
 export const useBackgroundStore = create<BackgroundState>()(
@@ -21,6 +25,9 @@ export const useBackgroundStore = create<BackgroundState>()(
       toggleEnabled: () => set((s) => ({ enabled: !s.enabled })),
       setEnabled: (value) => set({ enabled: value }),
       setType: (type) => set({ type }),
+      pixelFlickerEnabled: false,
+      togglePixelFlicker: () => set((s) => ({ pixelFlickerEnabled: !s.pixelFlickerEnabled })),
+      setPixelFlickerEnabled: (value) => set({ pixelFlickerEnabled: value }),
     }),
     {
       name: "background-preferences",
@@ -31,4 +38,3 @@ export const useBackgroundStore = create<BackgroundState>()(
     }
   )
 );
-
