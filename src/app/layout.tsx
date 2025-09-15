@@ -3,6 +3,7 @@ import { Cormorant } from 'next/font/google';
 import Script from 'next/script';
 import ThemeProvider from '@/components/ThemeProvider';
 import ThemeToggle from '@/components/ThemeToggle';
+import SoundToggle from '@/components/SoundToggle';
 
 const cormorant = Cormorant({
   subsets: ['latin'],
@@ -75,7 +76,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.className} ${cormorant.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${cormorant.className} ${cormorant.variable}`}
+    >
       <head>
         {/* Google Analytics */}
         <Script
@@ -102,7 +107,16 @@ export default function RootLayout({
                 const stored = localStorage.getItem('theme');
                 const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const wantDark = stored ? stored === 'dark' : systemDark;
-                if (wantDark) document.documentElement.classList.add('dark');
+                const root = document.documentElement;
+                if (wantDark) {
+                  root.classList.add('dark');
+                  root.classList.remove('light');
+                  root.style.colorScheme = 'dark';
+                } else {
+                  root.classList.add('light');
+                  root.classList.remove('dark');
+                  root.style.colorScheme = 'light';
+                }
               } catch (e) {}
             `,
           }}
@@ -136,8 +150,9 @@ export default function RootLayout({
       </head>
       <body className="bg-custom-bg text-custom-text antialiased dark:bg-gray-900 dark:text-gray-100">
         <ThemeProvider>
-          {/* Floating theme toggle button */}
-          <div className="fixed top-4 right-4 z-50">
+          {/* Floating quick toggles */}
+          <div className="fixed top-4 right-4 z-50 flex flex-col items-end gap-2 sm:flex-row">
+            <SoundToggle />
             <ThemeToggle />
           </div>
           {children}

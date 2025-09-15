@@ -1,15 +1,55 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
+import { useTheme } from "next-themes";
 import { CountdownTimer } from "src/components/CountdownTimer";
 import { TIMER_CONFIG } from "src/constants/timer";
 import { useTitleStore } from "src/store/titleStore";
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max);
+
+const hexToRgb = (hex: string): [number, number, number] => {
+  const sanitized = hex.replace("#", "");
+  const normalized =
+    sanitized.length === 3
+      ? sanitized
+          .split("")
+          .map((char) => char + char)
+          .join("")
+      : sanitized.padStart(6, "0").slice(0, 6);
+
+  const r = parseInt(normalized.substring(0, 2), 16);
+  const g = parseInt(normalized.substring(2, 4), 16);
+  const b = parseInt(normalized.substring(4, 6), 16);
+
+  return [r, g, b];
+};
+
+const interpolateColor = (start: string, end: string, factor: number) => {
+  const [sr, sg, sb] = hexToRgb(start);
+  const [er, eg, eb] = hexToRgb(end);
+  const clampedFactor = clamp(factor, 0, 1);
+
+  const r = Math.round(sr + (er - sr) * clampedFactor);
+  const g = Math.round(sg + (eg - sg) * clampedFactor);
+  const b = Math.round(sb + (eb - sb) * clampedFactor);
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
 
 export default function Home() {
   const [resetKey, setResetKey] = useState(0);
   const [currentSeconds, setCurrentSeconds] = useState<number>(
     TIMER_CONFIG.DEFAULT_SECONDS
   );
+  const { theme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -17,18 +57,57 @@ export default function Home() {
   const [storeLoaded, setStoreLoaded] = useState(false);
   const [storeHydrated, setStoreHydrated] = useState(false);
 
+  const isDarkMode = (resolvedTheme ?? theme) === "dark";
+
+  const countdownProgress = useMemo(() => {
+    const normalizedSeconds = clamp(
+      currentSeconds,
+      TIMER_CONFIG.MIN_SECONDS,
+      TIMER_CONFIG.DEFAULT_SECONDS
+    );
+    return 1 - normalizedSeconds / TIMER_CONFIG.DEFAULT_SECONDS;
+  }, [currentSeconds]);
+
+  const { baseColor, accentColor } = useMemo(() => {
+    if (isDarkMode) {
+      const background = interpolateColor("#111827", "#312E81", countdownProgress);
+      const accent = interpolateColor("#1F2937", "#4338CA", countdownProgress);
+      return { baseColor: background, accentColor: accent };
+    }
+
+    const background = interpolateColor("#EDEDED", "#FFE4E6", countdownProgress);
+    const accent = interpolateColor("#F4F4F5", "#FBCFE8", countdownProgress);
+    return { baseColor: background, accentColor: accent };
+  }, [countdownProgress, isDarkMode]);
+
+  const dynamicBackgroundStyle = useMemo(
+    () => ({
+      background: `radial-gradient(circle at 50% 20%, ${accentColor} 0%, ${baseColor} 55%, ${baseColor} 100%)`,
+      backgroundColor: baseColor,
+      transition: "background 600ms ease, background-color 600ms ease",
+    }),
+    [accentColor, baseColor]
+  );
+  const appliedBackgroundStyle = mounted ? dynamicBackgroundStyle : undefined;
+
   useEffect(() => {
     setMounted(true);
     // Ensure persisted Zustand state is applied on client
-    const unsub = useTitleStore.persist.onFinishHydration(() => {
+    const titlePersist = useTitleStore.persist;
+
+    const unsubTitle = titlePersist.onFinishHydration(() => {
       setStoreHydrated(true);
     });
-    useTitleStore.persist.rehydrate();
+    if (titlePersist.hasHydrated?.()) {
+      setStoreHydrated(true);
+    } else {
+      titlePersist.rehydrate();
+    }
 
     // Simulate small fade-in after store load
     const t = setTimeout(() => setStoreLoaded(true), 100);
     return () => {
-      unsub();
+      unsubTitle();
       clearTimeout(t);
     };
   }, []);
@@ -67,7 +146,10 @@ export default function Home() {
   if (!mounted || !storeHydrated) {
     // Render a loading state or a consistent structure on the server and initial client render.
     return (
-      <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100">
+      <main
+        className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100"
+        style={appliedBackgroundStyle}
+      >
         <div className="grid gap-6 sm:gap-8">
           <header className={`flex flex-col gap-2 text-center opacity-0`}>
             <h1
@@ -91,7 +173,10 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100">
+    <main
+      className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100"
+      style={appliedBackgroundStyle}
+    >
       <div className="grid gap-6 sm:gap-8">
         <header className={`flex flex-col gap-2 text-center ${storeLoaded ? 'opacity-100 transition-opacity duration-200' : 'opacity-0'}`}>
           {isEditing ? (
