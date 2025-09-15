@@ -4,6 +4,8 @@ import Script from 'next/script';
 import ThemeProvider from '@/components/ThemeProvider';
 import ThemeToggle from '@/components/ThemeToggle';
 import SoundToggle from '@/components/SoundToggle';
+import BackgroundManager from '@/components/backgrounds/BackgroundManager';
+import BackgroundToggle from '@/components/BackgroundToggle';
 
 const cormorant = Cormorant({
   subsets: ['latin'],
@@ -150,8 +152,11 @@ export default function RootLayout({
       </head>
       <body className="bg-custom-bg text-custom-text antialiased dark:bg-gray-900 dark:text-gray-100">
         <ThemeProvider>
+          {/* Background visuals (pluggable) */}
+          <BackgroundManager />
           {/* Floating quick toggles */}
           <div className="fixed top-4 right-4 z-50 flex flex-col items-end gap-2 sm:flex-row">
+            <BackgroundToggle />
             <SoundToggle />
             <ThemeToggle />
           </div>

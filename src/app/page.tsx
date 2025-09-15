@@ -88,7 +88,7 @@ export default function Home() {
     }),
     [accentColor, baseColor]
   );
-  const appliedBackgroundStyle = mounted ? dynamicBackgroundStyle : undefined;
+  const appliedBackgroundStyle = undefined;
 
   useEffect(() => {
     setMounted(true);
@@ -147,8 +147,7 @@ export default function Home() {
     // Render a loading state or a consistent structure on the server and initial client render.
     return (
       <main
-        className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100"
-        style={appliedBackgroundStyle}
+        className="min-h-screen grid place-items-center bg-transparent text-custom-text dark:text-gray-100"
       >
         <div className="grid gap-6 sm:gap-8">
           <header className={`flex flex-col gap-2 text-center opacity-0`}>
@@ -174,8 +173,7 @@ export default function Home() {
 
   return (
     <main
-      className="min-h-screen grid place-items-center bg-custom-bg text-custom-text dark:bg-gray-900 dark:text-gray-100"
-      style={appliedBackgroundStyle}
+      className="min-h-screen grid place-items-center bg-transparent text-custom-text dark:text-gray-100"
     >
       <div className="grid gap-6 sm:gap-8">
         <header className={`flex flex-col gap-2 text-center ${storeLoaded ? 'opacity-100 transition-opacity duration-200' : 'opacity-0'}`}>
